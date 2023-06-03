@@ -25,10 +25,7 @@ class BarrenPlateau:
         self.observable = observable
         self.nobs = None
 
-        if (self.ansatz_type == "TPA"
-            or self.ansatz_type == "HEA"
-            or self.ansatz_type == "SEA"
-        ):
+        if self.ansatz_type == ("TPA" or "HEA" or "SEA"):
             pass
         else:
             raise NameError("Input the correct ansatz type")
@@ -148,22 +145,30 @@ class BarrenPlateau:
                             gradients_list_for_TPA.append(gradients_list[j * nqubits + k])
 
                     grad_means.append(
-                        np.mean( [ np.mean(row) for row in gradients_list_for_TPA ] )
+                        np.mean(
+                            [np.mean(row) for row in gradients_list_for_TPA]
+                        )
                     )
                     grad_vars.append(
-                        np.mean( [ np.var(row) for row in gradients_list_for_TPA ] )
+                        np.mean(
+                            [np.var(row) for row in gradients_list_for_TPA]
+                        )
                     )
                 else:
                     grad_means.append(
-                        np.mean( [ np.mean(row) for row in gradients_list ] )
+                        np.mean(
+                            [np.mean(row) for row in gradients_list]
+                        )
                     )
                     grad_vars.append(
-                        np.mean( [ np.var(row) for row in gradients_list ] )
+                        np.mean(
+                            [np.var(row) for row in gradients_list]
+                        )
                     )
 
             self.grad_means_list.append(grad_means)
             self.grad_vars_list.append(grad_vars)
-            print( f"nqubits {nqubits},  observable size 2^{self.nobs} * 2^{self.nobs}" )
+            print(f"nqubits {nqubits},  observable size 2^{self.nobs} * 2^{self.nobs}")
 
         # return self.grad_means_list, self.grad_vars_list
 
@@ -188,10 +193,10 @@ class BarrenPlateau:
         plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
         plt.show()
 
-
     # nlayers_list must contain one element.
     def bp_nqubits(self):
-        """Simulate barren plateaus. Var<dH/dtheta_i> vs the number of qubits. This function is defined by bp_nlayers().
+        """Simulate barren plateaus. Var<dH/dtheta_i> vs the number of qubits.
+            This function is defined by bp_nlayers().
         Returns:
             means, variances (list[float]): list of means and variances of gradients for each nqubits
         """
@@ -212,7 +217,9 @@ class BarrenPlateau:
         # Fit the semilog plot to a straight line
         p = np.polyfit(
             x=self.nqubits_list,
-            y=np.log( np.clip(a=np.ravel(self.grad_vars_list), a_min=1e-323, a_max=None) ),
+            y=np.log(
+                np.clip(a=np.ravel(self.grad_vars_list), a_min=1e-323, a_max=None)
+            ),
             deg=1,
         )
 
