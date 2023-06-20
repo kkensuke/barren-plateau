@@ -1,7 +1,6 @@
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
-
 
 np.random.seed(42)
 
@@ -47,8 +46,9 @@ class BarrenPlateau:
             params = np.random.random(size=shape)
 
         return params
-
-    def make_global_observable(self, nqubits):
+    
+    @staticmethod
+    def make_global_observable(nqubits):
         """Generate the global observable H = |0><0|^{\otimes n}"""
         H = np.zeros((2**nqubits, 2**nqubits))
         H[0, 0] = 1
