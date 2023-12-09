@@ -24,7 +24,7 @@ class BarrenPlateau:
         self.observable = observable
         self.nobs = None
 
-        if self.ansatz_type == ("TPA" or "HEA" or "SEA"):
+        if self.ansatz_type == "TPA" or self.ansatz_type == "HEA" or self.ansatz_type == "SEA":
             pass
         else:
             raise NameError("Input the correct ansatz type")
@@ -175,9 +175,9 @@ class BarrenPlateau:
     def plot_bp_nlayers(self, mean=False):
         if mean:
             for i, nqubits in enumerate(self.nqubits_list):
-                plt.plot(self.nlayers_list, self.grad_means_list[i], label=f"nqubits = {nqubits}")
+                plt.plot(self.nlayers_list, self.grad_means_list[i], label=f"nqubits = {nqubits}", marker="o")
 
-            plt.plot(self.nlayers_list, np.zeros(len(self.nlayers_list)), marker="--")
+            plt.plot(self.nlayers_list, np.zeros(len(self.nlayers_list)), color="black", linestyle='dashed')
             plt.xlabel(r"N Layers")
             plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$ mean")
             plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
@@ -186,11 +186,13 @@ class BarrenPlateau:
             pass
 
         for i, nqubits in enumerate(self.nqubits_list):
-            plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"nqubits = {nqubits}")
+            plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"nqubits = {nqubits}", marker="o")
 
         plt.xlabel(r"N Layers")
         plt.ylabel(r"$\langle \partial_{\theta_i} E\rangle$ variance")
+        plt.ylim([1e-7, 1e-0])
         plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
+        plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable")
         plt.show()
 
     # nlayers_list must contain one element.
@@ -205,8 +207,8 @@ class BarrenPlateau:
 
     def plot_bp_nqubits(self, mean=False):
         if mean:
-            plt.plot(self.nqubits_list, self.grad_means_list, label="mean")
-            plt.plot(self.nqubits_list, np.zeros(len(self.nqubits_list)), marker="--")
+            plt.plot(self.nqubits_list, self.grad_means_list, label="mean", marker="o")
+            plt.plot(self.nqubits_list, np.zeros(len(self.nqubits_list)))
             plt.xlabel(r"N Qubits")
             plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$")
             plt.legend()
@@ -226,12 +228,13 @@ class BarrenPlateau:
         # Plot the straight line fit to the semilog
         plt.semilogy(self.nqubits_list, self.grad_vars_list, marker="o")
         plt.semilogy(
-            x=self.nqubits_list,
-            y=np.exp(p[0] * self.nqubits_list + p[1]),
-            marker="o-.",
+            self.nqubits_list,
+            np.exp(p[0] * self.nqubits_list + p[1]),
             label="Slope {:3.2f}".format(p[0]),
+            linestyle="dashed",
         )
         plt.xlabel(r"N Qubits")
         plt.ylabel(r"$\langle \partial_{\theta_i} E\rangle$ variance")
         plt.legend()
+        plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable")
         plt.show()
