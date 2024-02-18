@@ -178,21 +178,24 @@ class BarrenPlateau:
                 plt.plot(self.nlayers_list, self.grad_means_list[i], label=f"nqubits = {nqubits}", marker="o")
 
             plt.plot(self.nlayers_list, np.zeros(len(self.nlayers_list)), color="black", linestyle='dashed')
-            plt.xlabel(r"N Layers")
-            plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$ mean")
+            plt.xlabel(r"L", fontsize=18)
+            plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$ mean", fontsize=18)
             plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
             plt.show()
         else:
             pass
 
         for i, nqubits in enumerate(self.nqubits_list):
-            plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"nqubits = {nqubits}", marker="o")
+            plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"n = {nqubits}", marker="o")
 
-        plt.xlabel(r"N Layers")
-        plt.ylabel(r"$\langle \partial_{\theta_i} E\rangle$ variance")
+        plt.xlabel(r"L", fontsize=18)
+        plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
         plt.ylim([1e-7, 1e-0])
-        plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
-        plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable")
+        plt.legend(bbox_to_anchor=(1, 1), loc="upper left", fontsize=18)
+        plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable", fontsize=18)
+        plt.savefig(f"{self.ansatz_type}-{(self.observable is None)*'global'+(self.observable is not None)*'local'}-ob.svg", bbox_inches="tight")
         plt.show()
 
     # nlayers_list must contain one element.
@@ -209,8 +212,8 @@ class BarrenPlateau:
         if mean:
             plt.plot(self.nqubits_list, self.grad_means_list, label="mean", marker="o")
             plt.plot(self.nqubits_list, np.zeros(len(self.nqubits_list)))
-            plt.xlabel(r"N Qubits")
-            plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$")
+            plt.xlabel(r"n", fontsize=18)
+            plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$", fontsize=18)
             plt.legend()
             plt.show()
         else:
@@ -233,8 +236,9 @@ class BarrenPlateau:
             label="Slope {:3.2f}".format(p[0]),
             linestyle="dashed",
         )
-        plt.xlabel(r"N Qubits")
-        plt.ylabel(r"$\langle \partial_{\theta_i} E\rangle$ variance")
+        
+        plt.tick_params(labelsize=18)
+        plt.xlabel(r"N Qubits", fontsize=18)
+        plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
         plt.legend()
-        plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable")
         plt.show()
