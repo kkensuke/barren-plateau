@@ -89,7 +89,7 @@ class BarrenPlateau:
         Returns:
             QuantumCircuit: variational quantum circuit
         """
-        dev = qml.device("default.qubit", wires=nqubits)
+        dev = qml.device("lightning.qubit", wires=nqubits)
 
         def func(params, nqubits, nlayers):
 
@@ -123,7 +123,6 @@ class BarrenPlateau:
                 grad = qml.grad(qcircuit, argnum=0)
 
                 for _ in range(self.nsamples):
-
                     params = self.make_initial_params(nqubits, nlayers)
                     gradients = grad(params, nqubits, nlayers)
                     gradients_list.append(gradients)
@@ -195,7 +194,7 @@ class BarrenPlateau:
         plt.ylim([1e-7, 1e-0])
         plt.legend(bbox_to_anchor=(1, 1), loc="upper left", fontsize=18)
         plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable", fontsize=18)
-        plt.savefig(f"{self.ansatz_type}-{(self.observable is None)*'global'+(self.observable is not None)*'local'}-ob.svg", bbox_inches="tight")
+        plt.savefig(f"{self.ansatz_type}-{(self.observable is None)*'global'+(self.observable is not None)*'local'}-ob.pdf", bbox_inches="tight")
         plt.show()
 
     # nlayers_list must contain one element.
