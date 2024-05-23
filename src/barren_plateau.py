@@ -171,7 +171,12 @@ class BarrenPlateau:
 
         # return self.grad_means_list, self.grad_vars_list
 
-    def plot_bp_nlayers(self, mean=False):
+    def plot_bp_nlayers(self, x_axis='nqubits', mean=False):
+        if x_axis in ('nqubits', 'nlayers', '3D'):
+            pass
+        else:
+            raise NameError("Input the correct x_axis: 'nqubits', 'nlayers' or '3D'")
+        
         if mean:
             for i, nqubits in enumerate(self.nqubits_list):
                 plt.plot(self.nlayers_list, self.grad_means_list[i], label=f"nqubits = {nqubits}", marker="o")
@@ -184,18 +189,43 @@ class BarrenPlateau:
         else:
             pass
 
-        for i, nqubits in enumerate(self.nqubits_list):
-            plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"n = {nqubits}", marker="o")
+        if x_axis == 'nqubits':
+            for j, nlayers in enumerate(self.nlayers_list):
+                plt.semilogy(self.nqubits_list, np.array(self.grad_vars_list).T[j], label=f"n = {nlayers}", marker="o")
 
-        plt.xlabel(r"L", fontsize=18)
-        plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
-        plt.xticks(fontsize=18)
-        plt.yticks(fontsize=18)
-        plt.ylim([1e-7, 1e-0])
-        plt.legend(bbox_to_anchor=(1, 1), loc="upper left", fontsize=18)
-        plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable", fontsize=18)
-        plt.savefig(f"{self.ansatz_type}-{(self.observable is None)*'global'+(self.observable is not None)*'local'}-ob.pdf", bbox_inches="tight")
-        plt.show()
+            plt.xlabel(r"L", fontsize=18)
+            plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
+            plt.xticks(fontsize=18)
+            plt.yticks(fontsize=18)
+            plt.ylim([1e-7, 1e-0])
+            plt.legend(bbox_to_anchor=(1, 1), loc="upper left", fontsize=18)
+            plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable", fontsize=18)
+            # plt.savefig(f"{self.ansatz_type}-{(self.observable is None)*'global'+(self.observable is not None)*'local'}-ob.pdf", bbox_inches="tight")
+            plt.show()
+        elif x_axis == 'nlayers':
+            for i, nqubits in enumerate(self.nqubits_list):
+                plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"n = {nqubits}", marker="o")
+
+            plt.xlabel(r"L", fontsize=18)
+            plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
+            plt.xticks(fontsize=18)
+            plt.yticks(fontsize=18)
+            plt.ylim([1e-7, 1e-0])
+            plt.legend(bbox_to_anchor=(1, 1), loc="upper left", fontsize=18)
+            plt.title(f"{self.ansatz_type}; {(self.observable is None)*'Global'+(self.observable is not None)*'Local'} Observable", fontsize=18)
+            # plt.savefig(f"{self.ansatz_type}-{(self.observable is None)*'global'+(self.observable is not None)*'local'}-ob.pdf", bbox_inches="tight")
+            plt.show()
+        else:
+            ## 3D plot
+            mesh_nqubits, mesh_nlayers = np.meshgrid(self.nqubits_list, self.nlayers_list)
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            ax.plot_surface(mesh_nqubits, mesh_nlayers, np.log(np.array(self.grad_vars_list).T), cmap='viridis')
+            ax.set_xlabel('nqubits')
+            ax.set_ylabel('nlayers')
+            ax.set_zlabel('Var[grad]')
+            ax.view_init(40, 40)
+            plt.show()
 
     # nlayers_list must contain one element.
     def bp_nqubits(self):
