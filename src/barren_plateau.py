@@ -182,7 +182,7 @@ class BarrenPlateau:
                 plt.plot(self.nlayers_list, self.grad_means_list[i], label=f"nqubits = {nqubits}", marker="o")
 
             plt.plot(self.nlayers_list, np.zeros(len(self.nlayers_list)), color="black", linestyle='dashed')
-            plt.xlabel(r"L", fontsize=18)
+            plt.xlabel(r"nlayers", fontsize=18)
             plt.ylabel(r"$\langle \partial_{\theta_i} E \rangle$ mean", fontsize=18)
             plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
             plt.show()
@@ -191,9 +191,9 @@ class BarrenPlateau:
 
         if x_axis == 'nqubits':
             for j, nlayers in enumerate(self.nlayers_list):
-                plt.semilogy(self.nqubits_list, np.array(self.grad_vars_list).T[j], label=f"n = {nlayers}", marker="o")
+                plt.semilogy(self.nqubits_list, np.array(self.grad_vars_list).T[j], label=f"nlayers = {nlayers}", marker="o")
 
-            plt.xlabel(r"L", fontsize=18)
+            plt.xlabel(r"nqubits", fontsize=18)
             plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
             plt.xticks(fontsize=18)
             plt.yticks(fontsize=18)
@@ -204,7 +204,7 @@ class BarrenPlateau:
             plt.show()
         elif x_axis == 'nlayers':
             for i, nqubits in enumerate(self.nqubits_list):
-                plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"n = {nqubits}", marker="o")
+                plt.semilogy(self.nlayers_list, self.grad_vars_list[i], label=f"nqubits = {nqubits}", marker="o")
 
             plt.xlabel(r"L", fontsize=18)
             plt.ylabel("$Var[\partial_{\\theta} C]$", fontsize=18)
