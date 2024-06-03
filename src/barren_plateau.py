@@ -225,6 +225,7 @@ class BarrenPlateau:
             ax.set_ylabel('nlayers')
             ax.set_zlabel('Var[grad]')
             ax.view_init(40, 40)
+            ax.set_box_aspect(None, zoom=0.8)
             plt.show()
 
     # nlayers_list must contain one element.
