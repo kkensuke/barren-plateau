@@ -8,26 +8,25 @@ np.random.seed(42)
 class BarrenPlateau:
     def __init__(
         self,
-        nqubits_list,
-        nlayers_list,
-        ansatz_type,
-        nsamples=3,
-        shots=None,
-        observable=None
+        nqubits_list: list[int],
+        nlayers_list: list[int],
+        ansatz_type: str,
+        nsamples: int = 3,
+        shots: int = None,
+        observable = None  # use a global observable if None
     ):
 
-        self.nqubits_list = list(nqubits_list)
-        self.nlayers_list = list(nlayers_list)
+        self.nqubits_list = nqubits_list
+        self.nlayers_list = nlayers_list
         self.ansatz_type = ansatz_type
         self.nsamples = nsamples
         self.shots = shots
         self.observable = observable
         self.nobs = None
-
-        if self.ansatz_type == "TPA" or self.ansatz_type == "HEA" or self.ansatz_type == "SEA":
-            pass
-        else:
-            raise NameError("Input the correct ansatz type")
+        
+        valid_ansatz_types = {"TPA", "HEA", "SEA"}
+        if self.ansatz_type not in valid_ansatz_types:
+            raise ValueError(f"ansatz_type must be one of {valid_ansatz_types}")
 
     def make_initial_params(self, nqubits, nlayers):
         """Generate random parameters corresponding to the ansatz_type
@@ -102,7 +101,7 @@ class BarrenPlateau:
 
             return qml.expval(observable)
 
-        qcircuit = qml.QNode(func, dev)
+        qcircuit = qml.QNode(func, dev, diff_method="adjoint")
         return qcircuit
 
     def bp_nlayers(self):
